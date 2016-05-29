@@ -12,11 +12,16 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+configurations {
+    provided
+}
+
 sourceSets {
     main {
         java {
             srcDirs = ['src/main/java']
         }
+        compileClasspath += configurations.provided
     }
 
 
@@ -32,8 +37,17 @@ sourceSets {
 dependencies {
     compile 'com.sparkjava:spark-core:2.5'
     compile 'org.slf4j:slf4j-simple:1.7.21'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4'
+    compile group: 'com.google.guava', name: 'guava', version: '19.0'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
+    
+    
     compile name: 'grouper-0.3.8'
     
+    
+    provided group: 'org.projectlombok', name: 'lombok', version: '1.16.8'
+        
     testCompile 'junit:junit:4.12'
 }
 
