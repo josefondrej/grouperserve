@@ -3,6 +3,10 @@ apply plugin: 'java'
 repositories {
     //mavenCentral()
     jcenter()
+    
+     flatDir {
+       dirs 'libs'
+   }
 }
 
 sourceCompatibility = 1.8
@@ -28,6 +32,7 @@ sourceSets {
 dependencies {
     compile 'com.sparkjava:spark-core:2.5'
     compile 'org.slf4j:slf4j-simple:1.7.21'
+    compile name: 'grouper-0.3.8'
     
     testCompile 'junit:junit:4.12'
 }
