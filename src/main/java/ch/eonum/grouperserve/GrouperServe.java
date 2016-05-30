@@ -56,12 +56,14 @@ public class GrouperServe {
         		pc = pcParser.parse(pcString);
         	} catch (Exception e) {
         		response.status(HTTP_BAD_REQUEST);
-                return "Could not parser patient case " + pc;
+                return "Could not parse patient case " + pc;
         	}
         	
         	grouperKernels.get(request.queryParams("version")).groupByReference(pc);
         	
-        	return pc;
+        	response.status(200);
+            response.type("application/json");
+        	return objectToJSON(pc.getGrouperResult());
         });
         
         post("/calculate_ecw", (request, response) -> {
@@ -72,6 +74,19 @@ public class GrouperServe {
         	return "";
         });
     }
+
+	private static String objectToJSON(Object object) {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		StringWriter sw = new StringWriter();
+		try {
+			mapper.writeValue(sw, object);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sw.toString();
+	}
 
 	private static String validateRequest(Request request) {
 		String version = request.queryParams("version");
