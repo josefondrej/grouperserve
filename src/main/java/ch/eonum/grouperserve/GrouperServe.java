@@ -14,9 +14,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swissdrg.grouper.IGrouperKernel;
+import org.swissdrg.grouper.PatientCase;
 import org.swissdrg.grouper.WeightingRelation;
 import org.swissdrg.grouper.batchgrouper.Catalogue;
 import org.swissdrg.grouper.kernel.GrouperKernel;
+import org.swissdrg.grouper.pcparsers.UrlPatientCaseParser;
 import org.swissdrg.grouper.specs.SpecificationReader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +32,7 @@ public class GrouperServe {
 	private static final String GROUPERSPECS_FOLDER = "grouperspecs/";
 	private static HashMap<String, IGrouperKernel> grouperKernels;
 	private static HashMap<String, Map<String, WeightingRelation>> catalogues;
+	private static UrlPatientCaseParser pcParser = new UrlPatientCaseParser();
 	
 	public static void main(String[] args) {
 		String systems = loadSystems();
@@ -47,7 +50,18 @@ public class GrouperServe {
                 return validationMessage;
         	}
         	
-        	return "";
+        	String pcString = request.queryParams("pc");
+        	PatientCase pc = null;
+        	try {
+        		pc = pcParser.parse(pcString);
+        	} catch (Exception e) {
+        		response.status(HTTP_BAD_REQUEST);
+                return "Could not parser patient case " + pc;
+        	}
+        	
+        	grouperKernels.get(request.queryParams("version")).groupByReference(pc);
+        	
+        	return pc;
         });
         
         post("/calculate_ecw", (request, response) -> {
@@ -62,9 +76,11 @@ public class GrouperServe {
 	private static String validateRequest(Request request) {
 		String version = request.queryParams("version");
 		if(version == null)
-			return "You have to provide a version parameter. Choose one from /systems.";
+			return "You have to provide a 'version' parameter. Choose one from /systems.";
 		if(!grouperKernels.containsKey(version))
 			return "The provided version " + version + " does not exist.";
+		if(request.queryParams("pc") == null)
+			return "You have to provide a patient case in the 'pc' parameter!";
 		
 		return null;
 	}
