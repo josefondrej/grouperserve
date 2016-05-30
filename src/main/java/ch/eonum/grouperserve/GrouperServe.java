@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swissdrg.grouper.IGrouperKernel;
 import org.swissdrg.grouper.WeightingRelation;
-import org.swissdrg.grouper.batchgrouper.BatchgrouperExitCode;
 import org.swissdrg.grouper.batchgrouper.Catalogue;
 import org.swissdrg.grouper.kernel.GrouperKernel;
 import org.swissdrg.grouper.specs.SpecificationReader;
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class GrouperServe {
+	private final static Logger log = LoggerFactory.getLogger(GrouperServe.class);
 	private static final int HTTP_BAD_REQUEST = 400;
 	private static final String GROUPERSPECS_FOLDER = "grouperspecs/";
 	private static HashMap<String, IGrouperKernel> grouperKernels;
@@ -67,11 +69,12 @@ public class GrouperServe {
 			
 			for(Map<String, String> system : systemsJSON){
 				String version = system.get("version");
+				log.info("Loading grouper " + version);
 				String workspace = GROUPERSPECS_FOLDER + version + "/";
 				try {
 					catalogues.put(version, Catalogue.createFrom( workspace + "catalogue-acute.csv"));
 				} catch (FileNotFoundException e) {
-					System.err.println("Could not find DRG catalogue file "
+					log.error("Could not find DRG catalogue file "
 							+ workspace + "catalogue-acute.csv");
 					stop();
 				}
@@ -79,14 +82,13 @@ public class GrouperServe {
 					GrouperKernel grouper = reader.loadGrouper(workspace);
 					grouperKernels.put(version, grouper);
 				} catch (Exception e) {
-					System.err
-							.println("Error while loading DRG workspace " + workspace);
+					log.error("Error while loading DRG workspace " + workspace);
 					e.printStackTrace();
-					System.exit(BatchgrouperExitCode.WORKSPACE_LOADING_ERROR);
+					stop();
 				}
 			}
 		} catch (IOException e) {
-			System.err.println("Error during grouper server startup while loading systems: ");
+			log.error("Error during grouper server startup while loading systems: ");
 			e.printStackTrace();
 			stop();
 		}

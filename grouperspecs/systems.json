@@ -1,6 +1,6 @@
 [
     {   
-        "version" : "V3.0",
+        "version" : "V3_A",
         "name_de" : "SwissDRG 3.0 Abrechnungsversion 2014 / 2014",
         "name_fr" : "SwissDRG 3.0 Version de Tarification 2014 / 2014",
         "name_it" : "SwissDRG 3.0 Versione tariffazione 2014 / 2014",
@@ -10,7 +10,7 @@
         "application_year" : "2014"
     },
     {   
-        "version" : "V4.0",
+        "version" : "V4_A",
         "name_de" : "SwissDRG 4.0 Abrechnungsversion 2015 / 2015",
         "name_fr" : "SwissDRG 4.0 Version de Tarification 2015 / 2015",
         "name_it" : "SwissDRG 4.0 Versione tariffazione 2015 / 2015",
@@ -20,7 +20,7 @@
         "application_year" : "2015"
     },
     {   
-        "version" : "V5.0",
+        "version" : "V5_A",
         "name_de" : "SwissDRG 5.0 Abrechnungsversion 2016 / 2016",
         "name_fr" : "SwissDRG 5.0 Version de Tarification 2016 / 2016",
         "name_it" : "SwissDRG 5.0 Versione tariffazione 2016 / 2016",
