@@ -1,0 +1,11 @@
+[
+    {   
+        "version" : "V3.0",
+        "name_de" : "SwissDRG 3.0 Abrechnungsversion 2014 / 2014",
+        "name_fr" : "SwissDRG 3.0 Version de Tarification 2014 / 2014",
+        "icd" : "ICD10-GM-2012",
+        "chop" : "CHOP 2014",
+        "data_year" : "2014",
+        "application_year" : "2014"
+    }
+]
