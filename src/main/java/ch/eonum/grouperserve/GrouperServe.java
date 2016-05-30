@@ -22,6 +22,8 @@ import org.swissdrg.grouper.specs.SpecificationReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import spark.Request;
+
 public class GrouperServe {
 	private final static Logger log = LoggerFactory.getLogger(GrouperServe.class);
 	private static final int HTTP_BAD_REQUEST = 400;
@@ -38,18 +40,34 @@ public class GrouperServe {
             return systems;
         });
         
-        post("/group", (req, res) -> {
+        post("/group", (request, response) -> {
+        	String validationMessage = validateRequest(request);
+        	if(validationMessage != null){
+        		response.status(HTTP_BAD_REQUEST);
+                return validationMessage;
+        	}
+        	
         	return "";
         });
         
-        post("/calculate_ecw", (req, res) -> {
+        post("/calculate_ecw", (request, response) -> {
         	return "";
         });
         
-        post("/group_and_calculate_ecw", (req, res) -> {
+        post("/group_and_calculate_ecw", (request, response) -> {
         	return "";
         });
     }
+
+	private static String validateRequest(Request request) {
+		String version = request.queryParams("version");
+		if(version == null)
+			return "You have to provide a version parameter. Choose one from /systems.";
+		if(!grouperKernels.containsKey(version))
+			return "The provided version " + version + " does not exist.";
+		
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	private static String loadSystems() {
