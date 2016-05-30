@@ -13,6 +13,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swissdrg.grouper.EffectiveCostWeight;
+import org.swissdrg.grouper.GrouperResult;
 import org.swissdrg.grouper.IGrouperKernel;
 import org.swissdrg.grouper.PatientCase;
 import org.swissdrg.grouper.WeightingRelation;
@@ -59,19 +61,19 @@ public class GrouperServe {
                 return "Could not parse patient case " + pc;
         	}
         	
-        	grouperKernels.get(request.queryParams("version")).groupByReference(pc);
+        	String version = request.queryParams("version");
+        	IGrouperKernel grouper = grouperKernels.get(version);
+        	grouper.groupByReference(pc);
+        	GrouperResult gr = pc.getGrouperResult();
+        	Map<String, WeightingRelation> catalogue = catalogues.get(version);
+        	EffectiveCostWeight ecw = grouper.calculateEffectiveCostWeight(pc, catalogue.get(gr.getDrg()));
+        	Map<String, Object> result = new HashMap<>();
+        	result.put("grouperResult", gr);
+        	result.put("effectiveCostWeight", ecw);
         	
         	response.status(200);
             response.type("application/json");
-        	return objectToJSON(pc.getGrouperResult());
-        });
-        
-        post("/calculate_ecw", (request, response) -> {
-        	return "";
-        });
-        
-        post("/group_and_calculate_ecw", (request, response) -> {
-        	return "";
+        	return objectToJSON(result);
         });
     }
 
