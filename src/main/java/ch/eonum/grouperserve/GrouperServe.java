@@ -61,7 +61,7 @@ public class GrouperServe {
                 return "Could not parse patient case " + pc;
         	}
         	
-        	boolean prettyPrint = "true".equals(request.queryParams("pp"));
+        	boolean prettyPrint = "true".equals(request.queryParams("pretty"));
         		
         	
         	String version = request.queryParams("version");

@@ -27,6 +27,7 @@ Obtain a list of available SwissDRG systems.
 
 URL:
 `GET /systems`
+
 sample call using curl:
 
 ``curl "$ROOT_URL/systems"``
@@ -40,12 +41,12 @@ URL:
 Parameters:
 * pc: patient case in the URL patient case format
 * version: version identifier as provided by /systems
-* pp: pretty print (default is false)
+* pretty: pretty print JSON (default is false)
 	
 
 sample call using curl: 
 
-``curl --header "Accept: application/json" --data "version=V5_A&pc=AI34221_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_pp=true" "$ROOT_URL/group"``
+``curl --header "Accept: application/json" --data "version=V5_A&pc=AI34221_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_&pretty=true" "$ROOT_URL/group"``
 
 
 
