@@ -25,7 +25,14 @@ Obtain a list of available SwissDRG systems.
 URL:
 `GET /systems`
 sample call using curl:
-`curl "$ROOT_URL/systems"`
+
+``curl "$ROOT_URL/systems"``
+
+URL:
+`POST /group`
+sample call using curl: 
+
+``curl --header "Accept: application/json" --data "version=V5_A&pc=AI34221_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_" "$ROOT_URL/group"``
 
 
 
