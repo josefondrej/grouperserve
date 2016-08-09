@@ -61,6 +61,9 @@ public class GrouperServe {
                 return "Could not parse patient case " + pc;
         	}
         	
+        	boolean prettyPrint = "true".equals(request.queryParams("pp"));
+        		
+        	
         	String version = request.queryParams("version");
         	IGrouperKernel grouper = grouperKernels.get(version);
         	grouper.groupByReference(pc);
@@ -73,13 +76,14 @@ public class GrouperServe {
         	
         	response.status(200);
             response.type("application/json");
-        	return objectToJSON(result);
+        	return objectToJSON(result, prettyPrint);
         });
     }
 
-	private static String objectToJSON(Object object) {
+	private static String objectToJSON(Object object, boolean prettyPrint) {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		if(prettyPrint)
+			mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		StringWriter sw = new StringWriter();
 		try {
 			mapper.writeValue(sw, object);
