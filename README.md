@@ -52,10 +52,28 @@ Parameters:
 
 sample call using curl: 
 ```
-curl --header "Accept: application/json" --data "version=V5_A&pc=AI34221_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_&pretty=true" "$ROOT_URL/group"
+curl --header "Accept: application/json" --data "version=V5_A&pc=11_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_&pretty=true" "$ROOT_URL/group"
 ```
 
-## Run as docker container
+### group_many
+Group more than one patient case in one request.
+
+URL:
+`POST /group_many`
+
+Parameters:
+* pcs: patient cases JSON array with strings in the URL patient case format
+* version: version identifier as provided by /systems
+* pretty: pretty print JSON (default is false)
+	
+
+sample call using curl: 
+```
+curl --header "Accept: application/json" --data "version=V5_A&pcs=[\"11_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_\", \"12_65_0_0_M_01_00_1_0_I481\"]&pretty=true" "http://localhost:4567/group_many"
+```
+
+
+## Run as Docker container
 Run the server:
 ```
 docker run -it -v /home/tim/grouperserve:/opt/grouperserve -p 4567:4567 --workdir /opt/grouperserve --rm java:8 java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe

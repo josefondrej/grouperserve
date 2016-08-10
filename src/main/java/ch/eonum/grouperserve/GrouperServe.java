@@ -54,6 +54,11 @@ public class GrouperServe {
                 return validationMessage;
         	}
         	
+        	if(request.queryParams("pc") == null){
+        		response.status(HTTP_BAD_REQUEST);
+        		return "You have to provide a patient case in the 'pc' parameter!";
+        	}
+        	
         	String pcString = request.queryParams("pc");
         	PatientCase pc = null;
         	try {
@@ -80,6 +85,52 @@ public class GrouperServe {
             response.type("application/json");
         	return objectToJSON(result, prettyPrint, response);
         });
+        
+        post("/group_many", (request, response) -> {
+        	String validationMessage = validateRequest(request);
+        	if(validationMessage != null){
+        		response.status(HTTP_BAD_REQUEST);
+                return validationMessage;
+        	}
+        	
+        	if(request.queryParams("pcs") == null){
+        		response.status(HTTP_BAD_REQUEST);
+        		return "You have to provide a list of patient cases in the 'pcs' parameter!";
+        	}
+        	
+        	String version = request.queryParams("version");
+        	IGrouperKernel grouper = grouperKernels.get(version);
+        	Map<String, WeightingRelation> catalogue = catalogues.get(version);
+        	
+        	boolean prettyPrint = "true".equals(request.queryParams("pretty"));
+     	
+        	ObjectMapper mapper = new ObjectMapper();
+        	@SuppressWarnings("unchecked")
+			List<String> patientCases = mapper.readValue(request.queryParams("pcs"), ArrayList.class);
+        	List<Map<String, Object>> results = new ArrayList<>();
+        	
+        	for(String pcString : patientCases){	
+	        	PatientCase pc = null;
+	        	try {
+	        		pc = pcParser.parse(pcString);
+	        	} catch (Exception e) {
+	        		response.status(HTTP_BAD_REQUEST);
+	                return e.getMessage();
+	        	}     		
+	        	
+	        	grouper.groupByReference(pc);
+	        	GrouperResult gr = pc.getGrouperResult();
+	        	EffectiveCostWeight ecw = grouper.calculateEffectiveCostWeight(pc, catalogue.get(gr.getDrg()));
+	        	Map<String, Object> result = new HashMap<>();
+	        	result.put("grouperResult", gr);
+	        	result.put("effectiveCostWeight", ecw);
+	        	results.add(result);
+        	}
+        	
+        	response.status(200);
+            response.type("application/json");
+        	return objectToJSON(results, prettyPrint, response);
+        });
     }
 
 	private static String objectToJSON(Object object, boolean prettyPrint, Response response) {
@@ -90,8 +141,8 @@ public class GrouperServe {
 		try {
 			mapper.writeValue(sw, object);
 		} catch (IOException e) {
-			e.printStackTrace();
 			sw.append(e.getMessage());
+			log.error(e.getMessage());
 			response.status(INTERNAL_SERVER_ERROR);
 		}
 		return sw.toString();
@@ -103,8 +154,7 @@ public class GrouperServe {
 			return "You have to provide a 'version' parameter. Choose one from /systems.";
 		if(!grouperKernels.containsKey(version))
 			return "The provided version " + version + " does not exist.";
-		if(request.queryParams("pc") == null)
-			return "You have to provide a patient case in the 'pc' parameter!";
+		
 		
 		return null;
 	}
@@ -141,12 +191,14 @@ public class GrouperServe {
 					grouperKernels.put(version, grouper);
 				} catch (Exception e) {
 					log.error("Error while loading DRG workspace " + workspace);
+					log.error(e.getMessage());
 					e.printStackTrace();
 					stop();
 				}
 			}
 		} catch (IOException e) {
 			log.error("Error during grouper server startup while loading systems: ");
+			log.error(e.getMessage());
 			e.printStackTrace();
 			stop();
 		}
