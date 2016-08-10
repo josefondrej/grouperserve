@@ -58,12 +58,12 @@ curl --header "Accept: application/json" --data "version=V5_A&pc=AI34221_65_0_0_
 ## Run as docker container
 Run the server:
 ```
-docker run -it -v /home/tim/grouperserve:/opt/grouperserve -p 4568:4567 --workdir /opt/grouperserve --rm java:8 java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
+docker run -it -v /home/tim/grouperserve:/opt/grouperserve -p 4567:4567 --workdir /opt/grouperserve --rm java:8 java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
 ```
 
 Run in detached mode:
 ```
-docker run -v /home/tim/grouperserve:/opt/grouperserve -p 4568:4567 --workdir /opt/grouperserve --name=grouperserve --detach=true java:8 java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
+docker run -v /home/tim/grouperserve:/opt/grouperserve -p 4567:4567 --workdir /opt/grouperserve --name=grouperserve --detach=true java:8 java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
 ```
 In detached mode you can stop, kill, remove or start the server as follows:
 ```
@@ -71,6 +71,10 @@ docker stop grouperserve
 docker kill grouperserve
 docker remove grouperserve
 docker start grouperserve
+```
+Follow the logs:
+```
+docker logs -ft grouperserve
 ```
 
 
