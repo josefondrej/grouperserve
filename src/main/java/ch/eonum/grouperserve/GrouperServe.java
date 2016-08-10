@@ -27,10 +27,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import spark.Request;
+import spark.Response;
 
 public class GrouperServe {
 	private final static Logger log = LoggerFactory.getLogger(GrouperServe.class);
 	private static final int HTTP_BAD_REQUEST = 400;
+	private static final int INTERNAL_SERVER_ERROR = 500;
 	private static final String GROUPERSPECS_FOLDER = "grouperspecs/";
 	private static HashMap<String, IGrouperKernel> grouperKernels;
 	private static HashMap<String, Map<String, WeightingRelation>> catalogues;
@@ -58,7 +60,7 @@ public class GrouperServe {
         		pc = pcParser.parse(pcString);
         	} catch (Exception e) {
         		response.status(HTTP_BAD_REQUEST);
-                return "Could not parse patient case " + pc;
+                return e.getMessage();
         	}
         	
         	boolean prettyPrint = "true".equals(request.queryParams("pretty"));
@@ -76,11 +78,11 @@ public class GrouperServe {
         	
         	response.status(200);
             response.type("application/json");
-        	return objectToJSON(result, prettyPrint);
+        	return objectToJSON(result, prettyPrint, response);
         });
     }
 
-	private static String objectToJSON(Object object, boolean prettyPrint) {
+	private static String objectToJSON(Object object, boolean prettyPrint, Response response) {
 		ObjectMapper mapper = new ObjectMapper();
 		if(prettyPrint)
 			mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -88,8 +90,9 @@ public class GrouperServe {
 		try {
 			mapper.writeValue(sw, object);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			sw.append(e.getMessage());
+			response.status(INTERNAL_SERVER_ERROR);
 		}
 		return sw.toString();
 	}

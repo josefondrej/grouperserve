@@ -4,15 +4,20 @@ Microservice / WebAPI for the SwissDRG grouper. Provided as a REST JSON API over
 ## Getting started
 
 Build jar:
-`gradle build`
+```
+gradle build
+```
 
 Run grouper server:
-`java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe`
+```
+java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
+```
 
 
 Test this URL in your browser:
 `http://localhost:4567/systems`
-You should obtain a list of all provided SwissDRG systems in a JSON array.
+You should obtain a list of all provided SwissDRG systems in a JSON array. 
+In order for the service to be functional you have to provide the JSON specifications for each system in the folder /grouperspecs with the folder names matching the field 'version' as obtained by the above call.
 
 ## The patient case URL format
 ![the URL patient case format](PatientCase_URL_format.png "The patient case URL format")
@@ -29,8 +34,9 @@ URL:
 `GET /systems`
 
 sample call using curl:
-
-``curl "$ROOT_URL/systems"``
+```
+curl "$ROOT_URL/systems"
+```
 
 ### group
 Group a patient case and obtain a grouper result and an effective cost weight.
@@ -45,8 +51,9 @@ Parameters:
 	
 
 sample call using curl: 
-
-``curl --header "Accept: application/json" --data "version=V5_A&pc=AI34221_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_&pretty=true" "$ROOT_URL/group"``
+```
+curl --header "Accept: application/json" --data "version=V5_A&pc=AI34221_65_0_0_M_01_00_1_0_I481_Z921_F051_-_8954_&pretty=true" "$ROOT_URL/group"
+```
 
 
 
