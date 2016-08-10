@@ -1,0 +1,1 @@
+docker run -v /home/tim/grouperserve:/opt/grouperserve -p 4568:4567 --workdir /opt/grouperserve --name=grouperserve --detach=true java:8 java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
