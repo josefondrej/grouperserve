@@ -39,7 +39,7 @@ curl "$ROOT_URL/systems"
 ```
 
 ### group
-Group a patient case and obtain a grouper result and an effective cost weight.
+Group a patient case and obtain a grouper result and an effective cost weight. You can find a documentation of the grouper result and the effective cost weight in the documentation for the SwissDRG grouper.
 
 URL:
 `POST /group`
@@ -48,7 +48,7 @@ Parameters:
 * pc: patient case in the URL patient case format
 * version: version identifier as provided by /systems
 * pretty: (true|false) pretty print JSON (default is false)
-* annotate: (true|false) return the annotated patient case with CCL values, validatios and used flags (default is false)
+* annotate: (true|false) return the annotated patient case with CCL values, validations and used flags (default is false)
 
 sample call using curl: 
 ```
