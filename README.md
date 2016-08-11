@@ -1,5 +1,5 @@
 # grouperserve
-Microservice / WebAPI for the SwissDRG grouper. Provided as a REST JSON API over HTTP/HTTPS using the Java framework Spark.
+Microservice for the SwissDRG grouper. Provided as a REST JSON API over HTTP/HTTPS using the Java framework Spark.
 
 ## Getting started
 
@@ -17,7 +17,7 @@ java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
 Test this URL in your browser:
 `http://localhost:4567/systems`
 You should obtain a list of all provided SwissDRG systems in a JSON array. 
-In order for the service to be functional you have to provide the JSON specifications (as provided by SwissDRG AG) for each system in the folder /grouperspecs with the folder names matching the field 'version' as obtained by the above call.
+In order for the service to be functional you have to provide the JSON specifications (as provided by SwissDRG AG) for each system in the folder /grouperspecs with the folder names matching the field 'version' as obtained by the above call and stored in grouperspecs/versions.json.
 
 ## The patient case URL format
 ![the URL patient case format](PatientCase_URL_format.png "The patient case URL format")
