@@ -47,8 +47,8 @@ URL:
 Parameters:
 * pc: patient case in the URL patient case format
 * version: version identifier as provided by /systems
-* pretty: pretty print JSON (default is false)
-	
+* pretty: (true|false) pretty print JSON (default is false)
+* annotate: (true|false) return the annotated patient case with CCL values, validatios and used flags (default is false)
 
 sample call using curl: 
 ```
@@ -63,8 +63,7 @@ URL:
 
 Parameters:
 * pcs: patient cases JSON array with strings in the URL patient case format
-* version: version identifier as provided by /systems
-* pretty: pretty print JSON (default is false)
+* version, pretty, annotate: see /group
 	
 
 sample call using curl: 

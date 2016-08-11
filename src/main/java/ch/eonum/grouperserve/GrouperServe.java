@@ -23,6 +23,7 @@ import org.swissdrg.grouper.kernel.GrouperKernel;
 import org.swissdrg.grouper.pcparsers.UrlPatientCaseParser;
 import org.swissdrg.grouper.specs.SpecificationReader;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -67,8 +68,9 @@ public class GrouperServe {
         		response.status(HTTP_BAD_REQUEST);
                 return e.getMessage();
         	}
-        	
+
         	boolean prettyPrint = "true".equals(request.queryParams("pretty"));
+        	boolean annotate = "true".equals(request.queryParams("annotate"));
         		
         	
         	String version = request.queryParams("version");
@@ -80,6 +82,8 @@ public class GrouperServe {
         	Map<String, Object> result = new HashMap<>();
         	result.put("grouperResult", gr);
         	result.put("effectiveCostWeight", ecw);
+        	if(annotate)
+        		result.put("patientCase", pc);
         	
         	response.status(200);
             response.type("application/json");
@@ -103,6 +107,7 @@ public class GrouperServe {
         	Map<String, WeightingRelation> catalogue = catalogues.get(version);
         	
         	boolean prettyPrint = "true".equals(request.queryParams("pretty"));
+        	boolean annotate = "true".equals(request.queryParams("annotate"));
      	
         	ObjectMapper mapper = new ObjectMapper();
         	@SuppressWarnings("unchecked")
@@ -124,6 +129,8 @@ public class GrouperServe {
 	        	Map<String, Object> result = new HashMap<>();
 	        	result.put("grouperResult", gr);
 	        	result.put("effectiveCostWeight", ecw);
+	        	if(annotate)
+	        		result.put("patientCase", pc);
 	        	results.add(result);
         	}
         	
@@ -135,6 +142,8 @@ public class GrouperServe {
 
 	private static String objectToJSON(Object object, boolean prettyPrint, Response response) {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		
 		if(prettyPrint)
 			mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		StringWriter sw = new StringWriter();
@@ -143,6 +152,7 @@ public class GrouperServe {
 		} catch (IOException e) {
 			sw.append(e.getMessage());
 			log.error(e.getMessage());
+			e.printStackTrace();
 			response.status(INTERNAL_SERVER_ERROR);
 		}
 		return sw.toString();
