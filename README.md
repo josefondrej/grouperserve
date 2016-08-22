@@ -3,10 +3,33 @@ Microservice for the SwissDRG grouper. Provided as a REST JSON API over HTTP/HTT
 
 ## Getting started
 
+Copy grouper jar to the libs directory:
+```
+mkdir libs
+cp grouper_0.4.0.jar libs 
+```
+
+Make sure gradle -v returns something similar to this:
+
+```
+------------------------------------------------------------
+Gradle 3.0
+------------------------------------------------------------
+
+Build time:   2016-08-15 13:15:01 UTC
+Revision:     ad76ba00f59ecb287bd3c037bd25fc3df13ca558
+
+Groovy:       2.4.7
+Ant:          Apache Ant(TM) version 1.9.6 compiled on June 29 2015
+JVM:          1.8.0_101 (Oracle Corporation 25.101-b13)
+OS:           Linux 3.19.0-59-generic amd64
+```
+
 Build jar:
 ```
 gradle build
 ```
+In order for the service to be functional you have to provide the JSON specifications (as provided by SwissDRG AG) for each system in the folder /grouperspecs with the folder names matching the field 'version' as obtained by the above call and stored in grouperspecs/versions.json.
 
 Run grouper server:
 ```
@@ -17,7 +40,7 @@ java -cp build/libs/grouperserve-0.1.1.jar ch.eonum.grouperserve.GrouperServe
 Test this URL in your browser:
 `http://localhost:4567/systems`
 You should obtain a list of all provided SwissDRG systems in a JSON array. 
-In order for the service to be functional you have to provide the JSON specifications (as provided by SwissDRG AG) for each system in the folder /grouperspecs with the folder names matching the field 'version' as obtained by the above call and stored in grouperspecs/versions.json.
+
 
 ## The patient case URL format
 ![the URL patient case format](PatientCase_URL_format.png "The patient case URL format")
