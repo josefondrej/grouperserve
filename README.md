@@ -29,7 +29,7 @@ Build jar:
 ```
 gradle build
 ```
-In order for the service to be functional you have to provide the JSON specifications (as provided by SwissDRG AG) for each system in the folder /grouperspecs with the folder names matching the field 'version' as obtained by the above call and stored in grouperspecs/versions.json.
+In order for the service to be functional you have to provide the JSON specifications (as provided by SwissDRG AG) for each system in the folder /grouperspecs with the folder names matching the field 'version' as obtained by the above call and stored in grouperspecs/systems.json.
 
 Run grouper server:
 ```
