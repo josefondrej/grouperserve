@@ -109,7 +109,7 @@ In detached mode you can stop, kill, remove or start the server as follows:
 ```
 docker stop grouperserve
 docker kill grouperserve
-docker remove grouperserve
+docker rm grouperserve
 docker start grouperserve
 ```
 Follow the logs:
