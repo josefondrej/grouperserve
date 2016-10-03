@@ -92,6 +92,7 @@ public class GrouperServe {
             if (annotate)
                 result.put("patientCase", pc);
 
+            result.put("pdx", pc.getPdx());
             result.put("diagnoses", pc.getDiagnoses());
             result.put("procedures", pc.getProcedures());
 
